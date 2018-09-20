@@ -1,0 +1,30 @@
+https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/
+
+First we are going to run the following command in the terminal
+to enter the Scrapy environment.
+    > scrapy shell
+
+Then we can fetch a bunch of data from the GoT subreddit.
+    > fetch("https://www.reddit.com/r/gameofthrones/")
+
+Look at the website that this data is using:
+    > view(response)
+
+Look at the long form of this data using:
+    > print response.txt
+
+Now let's make a list of things we want to extract:
+    - Title of each post
+    - Number of votes it has
+    - Number of comments
+    - Time of post creation
+
+Extracting Titles
+Scrapy provides ways to extract information from HTML based
+on css selectors like class, id etc. Let’s find the css
+selector for title, right click on any post’s title and
+select “Inspect” or “Inspect Element”:
+    - We can see the css class 'title' is applied to all the
+    <p> tags that have titles.
+    > response.css(".title::text").extract()
+
