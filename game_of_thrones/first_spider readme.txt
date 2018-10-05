@@ -16,4 +16,9 @@ tutorial/
         spiders/          # a directory where you'll later put your spiders
             __init__.py
 
+Build the python script: first_spider.py
+
+Navigate to the top of the directory called 'first_spider' and run
+    > scrapy crawl quotes
+
 
