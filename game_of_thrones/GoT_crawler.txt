@@ -1,6 +1,8 @@
 """
 Games Of Thrones Web Crawler Project
 ====================================
+Conda Environment = 'decoding_websites'
+    - access with >conda activate decoding_websites
 """
 https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/
 
@@ -13,6 +15,9 @@ Then we can fetch a bunch of data from the GoT subreddit.
 
 Look at the website that this data is using:
     > view(response)
+
+View the URL of the response
+    > response.url
 
 Look at the long form of this data using:
     > print response.txt
