@@ -20,7 +20,7 @@ View the URL of the response
     > response.url
 
 Look at the long form of this data using:
-    > print response.txt
+    > print response.body (.txt does not work)
 
 Now let's make a list of things we want to extract:
     - Title of each post

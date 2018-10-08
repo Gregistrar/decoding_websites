@@ -21,4 +21,4 @@ Build the python script: first_spider.py
 Navigate to the top of the directory called 'first_spider' and run
     > scrapy crawl quotes
 
-
+Open the Scrapy shell to
