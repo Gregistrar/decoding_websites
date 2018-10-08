@@ -5,6 +5,7 @@ Conda Environment = 'decoding_websites'
     - access with >conda activate decoding_websites
 """
 https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/
+https://doc.scrapy.org/en/latest/intro/tutorial.html
 
 First we are going to run the following command in the terminal
 to enter the Scrapy environment.
@@ -35,5 +36,15 @@ selector for title, right click on any post’s title and
 select “Inspect” or “Inspect Element”:
     - We can see the css class 'title' is applied to all the
     <p> tags that have titles.
-    > response.css(".title::text").extract()
+    > response.css('title::text').extract()
+
+    - Get a specific item from the extract list
+        > response.css('title::text')[1].extract()
+
+    - Also uses xpath expressions. XPath expressions offer more power because besides navigating
+    the structure, it can also look at the content. Using XPath, you’re able to select things like:
+    select the link that contains the text “Next Page”. This makes XPath very fitting to the task of scraping,
+    and we encourage you to learn XPath even if you already know how to construct CSS selectors, it will make
+    scraping much easier.
+        > response.xpath('//title/text()').extract_first()
 
