@@ -1,67 +1,65 @@
-import yfpy
-from yfpy.query import YahooFantasySportsQuery
-from yahoo_oauth import OAuth2
-import json
-import openpyxl
-from datetime import date
-
 import pandas as pd
-import itertools
-import numpy as np
-import matplotlib.pyplot as plt
+from requests import get, post
+import json
+import webbrowser
+import base64
+
+client_id = 'dj0yJmk9VEswVEhQWjd4ZE9YJmQ9WVdrOVEydEJVSFpvTkRrbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWZk'
+client_secret = '5cac93055b55b321450a43a02047f7e7bee9a14b'
+base_url = 'https://api.login.yahoo.com/'
+
+
+code_url = f'oauth2/request_auth?client_id={client_id}&redirect_uri=oob&response_type=code&language=en-us'
+webbrowser.open(base_url + code_url)
+print(base_url + code_url)
+
+code = 'ccnnjxs'
+
+encoded = base64.b64encode((client_id + ':' + client_secret).encode("utf-8"))
+headers = {
+    'Authorization': f'Basic {encoded.decode("utf-8")}',
+    'Content-Type': 'application/x-www-form-urlencoded'
+}
+data = {
+    'grant_type': 'authorization_code',
+    'redirect_uri': 'oob',
+    'code': code
+}
+
+
+response = post(base_url + 'oauth2/get_token', headers=headers, data=data)
+response.json()
+
+access_token = response.json()['access_token']
+refresh_token = response.json()['refresh_token']
+
+
+# Refresh access token
+data = {
+    'grant_type': 'refresh_token',
+    'redirect_uri': 'oob',
+    'code': code,
+    'refresh_token': refresh_token
+}
+response = post(base_url + 'oauth2/get_token', headers=headers, data=data)
+access_token = response.json()['access_token']
 
 
 
-oauth = OAuth2(None, None, from_file='C:/Users/ghodg/Desktop/Augo Work League/private.json')
-
-#access/secret API tokens
-if not oauth.token_is_valid():
-    oauth.refresh_access_token()
 
 
 
 
-# Function that pulls data from Yahoo's Fantasy API and returns a sorted list of tuples with (team_id,current points)
-def pull_data(season, league_id, game_id, game_code, auth_dir):
-    # Query yffpy to get data
-    yahoo_query = YahooFantasySportsQuery(auth_dir, league_id, game_id=game_id, game_code=game_code, offline=False)
-
-    # Get standings data to get the points for the day
-    standings_data = yahoo_query.get_league_standings()
-
-    # Convert Standings Object to json
-    parsed_json = (json.loads(str(standings_data)))
-
-    # Initialize a list that can store the data
-    team_list = []
-    # Iterate over the Standings json to get teamids and their respective points
-    for team in parsed_json['teams']:
-        team_list.append((int(team['team']['team_id']), team['team']['team_standings']['points_for']))
-
-    # Sort the team list by the team id
-    team_list = sorted(team_list)
-
-    return team_list
 
 
-# Function that takes in a sorted list of tuples with (team_id,current points) and puts it in an excel sheet
-def write_to_sheet(working_dir, excel_file_name, team_list):
-    # open file and go to active sheet
-    book = openpyxl.load_workbook(working_dir + excel_file_name)
-    sheet = book.active
 
-    # Create a list with the first column being the date and the following columns being the points for each respective team
-    new_excel_row = []
-    new_excel_row.append(date.today().strftime("%d/%m/%Y"))
 
-    for team in team_list:
-        new_excel_row.append(team[1])
 
-    # Add new row to sheet and save the file
-    sheet.append(new_excel_row)
-    book.save(working_dir + excel_file_name)
 
-    return "Inserted new row in " + excel_file_name + " for date: " + date.today().strftime("%d/%m/%Y")
+
+
+
+
 
 
 if __name__ == "__main__":
